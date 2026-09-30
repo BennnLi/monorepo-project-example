@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import type { HelloResponse, HealthResponse } from '@monorepotest/shared';
 
 const message = ref('');
 const health = ref('checking...');
 const count = ref(0);
 
-interface ApiResponse {
-    message?: string;
-    status?: string;
-}
-
 const fetchHello = async () => {
     try {
         const res = await fetch('/api/hello');
-        const data: ApiResponse = (await res.json()) as ApiResponse;
-        message.value = data.message ?? '';
+        const data = (await res.json()) as HelloResponse;
+        message.value = data.message;
     } catch {
         message.value = 'Failed to connect to server';
     }
@@ -23,8 +19,8 @@ const fetchHello = async () => {
 const checkHealth = async () => {
     try {
         const res = await fetch('/api/health');
-        const data: ApiResponse = (await res.json()) as ApiResponse;
-        health.value = data.status ?? '';
+        const data = (await res.json()) as HealthResponse;
+        health.value = data.status;
     } catch {
         health.value = 'unreachable';
     }

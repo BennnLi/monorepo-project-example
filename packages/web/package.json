@@ -9,6 +9,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@monorepotest/shared": "workspace:*",
         "vue": "^3.5.0"
     },
     "devDependencies": {

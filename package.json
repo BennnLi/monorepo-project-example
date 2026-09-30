@@ -4,6 +4,9 @@
     "private": true,
     "type": "module",
     "description": "Monorepo with server and web packages",
+    "engines": {
+        "node": ">=22"
+    },
     "scripts": {
         "dev:server": "pnpm --filter server dev",
         "dev:web": "pnpm --filter web dev",

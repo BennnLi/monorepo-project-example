@@ -1,4 +1,5 @@
 import http from 'node:http';
+import type { HealthResponse, HelloResponse } from '@monorepotest/shared';
 
 const PORT = Number(process.env.PORT) || 3000;
 
@@ -17,14 +18,16 @@ const server = http.createServer((req, res) => {
     const url = req.url || '/';
 
     if (url === '/api/health') {
+        const data: HealthResponse = { status: 'ok', timestamp: new Date().toISOString() };
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }));
+        res.end(JSON.stringify(data));
         return;
     }
 
     if (url === '/api/hello') {
+        const data: HelloResponse = { message: 'Hello from monorepotest server!' };
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Hello from monorepotest server!' }));
+        res.end(JSON.stringify(data));
         return;
     }
 
