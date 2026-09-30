@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "jsxImportSource": "vue",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/vite-env.d.ts"],
+    "references": [{ "path": "./tsconfig.node.json" }]
+}
