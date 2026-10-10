@@ -4,4 +4,5 @@ dist
 .DS_Store
 *.local
 .env
-.env.*
+# web 构建产物落点（vite outDir），不入库
+packages/server/public/

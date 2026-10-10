@@ -5,15 +5,23 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsc",
-        "start": "node dist/index.js"
+        "build": "node scripts/clean-dist.mjs && tsc && node scripts/assemble-dist.mjs",
+        "start": "node dist/src/index.js"
     },
     "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
         "@types/node": "^22.0.0",
+        "@types/ws": "^8.18.2",
         "tsx": "^4.19.0",
         "typescript": "^5.6.0"
     },
     "dependencies": {
-        "@monorepotest/shared": "workspace:*"
+        "@monorepotest/shared": "workspace:*",
+        "cors": "^2.8.6",
+        "express": "^5.2.1",
+        "pino": "^10.4.0",
+        "pino-pretty": "^13.2.0",
+        "ws": "^8.22.0"
     }
 }

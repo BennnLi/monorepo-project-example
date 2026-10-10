@@ -7,7 +7,7 @@ import prettier from 'eslint-config-prettier';
 export default tseslint.config(
     // 全局忽略
     {
-        ignores: ['**/dist/**', '**/node_modules/**', '**/*.d.ts'],
+        ignores: ['**/dist/**', '**/public/**', '**/node_modules/**', '**/*.d.ts'],
     },
 
     // 所有文件 — 基础推荐规则（不需要类型信息）

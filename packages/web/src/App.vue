@@ -6,9 +6,13 @@ const message = ref('');
 const health = ref('checking...');
 const count = ref(0);
 
+// API 基础路径由环境变量决定（开发环境走 Vite 代理，正式环境可指向完整后端地址）
+// 变量缺失时（自定义 mode 构建、env 文件未随提交等）回退默认值，避免初始化即崩溃
+const API_BASE = (import.meta.env.VITE_API_BASE ?? '/v1/api').replace(/\/+$/, '');
+
 const fetchHello = async () => {
     try {
-        const res = await fetch('/api/hello');
+        const res = await fetch(`${API_BASE}/hello`);
         const data = (await res.json()) as HelloResponse;
         message.value = data.message;
     } catch {
@@ -18,7 +22,7 @@ const fetchHello = async () => {
 
 const checkHealth = async () => {
     try {
-        const res = await fetch('/api/health');
+        const res = await fetch(`${API_BASE}/health`);
         const data = (await res.json()) as HealthResponse;
         health.value = data.status;
     } catch {

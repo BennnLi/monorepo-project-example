@@ -13,7 +13,7 @@
         "dev": "pnpm run --parallel dev:server dev:web",
         "build:server": "pnpm --filter server build",
         "build:web": "pnpm --filter web build",
-        "build": "pnpm -r run build",
+        "build": "pnpm build:web && pnpm build:server",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
