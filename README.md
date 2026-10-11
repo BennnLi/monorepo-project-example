@@ -147,13 +147,38 @@ pnpm format:check    # 检查格式是否一致
 
 所有接口统一前缀 `/v1/api`：
 
-| 方法 | 路径             | 响应                                                                                                 |
-| ---- | ---------------- | ---------------------------------------------------------------------------------------------------- |
-| GET  | `/v1/api/health` | `{ status: "ok", timestamp: "..." }`                                                                 |
-| GET  | `/v1/api/hello`  | `{ message: "Hello from monorepotest server!" }`                                                     |
-| WS   | `/v1/api/ws`     | WebSocket：连接后推送 `connected` 事件，消息回显。单帧上限 64KB，最多 100 个并发连接（超出返回 503） |
+| 方法 | 路径                       | 响应                                                                    |
+| ---- | -------------------------- | ----------------------------------------------------------------------- |
+| GET  | `/v1/api/health`           | `{ status: "ok", timestamp: "..." }`                                    |
+| GET  | `/v1/api/hello`            | `{ message: "Hello from monorepotest server!" }`                        |
+| WS   | `/v1/api/ws?id=<socketId>` | WebSocket 长连接入口（`id` 必填且不可重复），见下方「WebSocket 长连接」 |
 
 开发模式下 Vite 会将 `/v1/api/*` 请求（含 WebSocket 升级）代理到 server 端 `localhost:8081`。
+
+## WebSocket 长连接
+
+连接地址：`ws://localhost:<PORT>/v1/api/ws?id=<socketId>`（`id` 必填且不可重复；校验失败会先完成升级、下发错误报文后关闭）。
+
+消息格式：
+
+- 客户端 → 服务端：`{ "action": "sys.login", "seq": "1", "data": {} }`；心跳直接发送文本 `ping`
+- 服务端 → 客户端：`{ "error": 0, "seq": "1", "action": "sys.loginRsp", "data": {} }`；心跳应答文本 `pong`
+- 失败响应的 `action` 后缀为 `Resp`（沿用原模板），成功为 `Rsp`
+
+内置路由：
+
+| action          | 需要认证 | 说明                       |
+| --------------- | -------- | -------------------------- |
+| `sys.login`     | 否       | 登录认证，解除认证超时限制 |
+| `sys.timestamp` | 否       | 返回服务器时间戳           |
+| `device.sync`   | 是       | 同步设备，需先 `sys.login` |
+
+连接生命周期：
+
+- 连接后 60 秒内未完成 `sys.login` 会被服务端断开
+- 90 秒无心跳（文本 `ping`）的连接会被服务端清理
+
+资源限制：单帧上限 64KB，最多 100 个并发连接（超出返回 503）。
 
 ## 环境变量
 
